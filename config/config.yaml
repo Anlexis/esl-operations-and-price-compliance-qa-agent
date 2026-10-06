@@ -1,0 +1,22 @@
+# Runtime parameters — read by src/services/runtime_config.py and passed to the
+# graph as Graph(config=...). Separate from config/agent.yaml, which is the
+# static manifest and holds no runtime values.
+#
+# Every value here has a reader. max_retry drives the backbone's retry route;
+# timeout_s is the declared per-call budget carried on the graph config for the
+# hosting runtime; the retrieval block reaches the ranking step through the
+# inner graph's initial state. Values are bounds-checked on load, so an
+# out-of-range or non-finite entry degrades to the documented default rather
+# than silently changing what the agent grounds on.
+
+max_retry: 3
+timeout_s: 30
+
+# Retrieval tuning. Staff questions carry SKU codes and part numbers, so hybrid
+# search is enabled; retail guidance is not life-safety, so the relevance
+# threshold sits at 0.5 rather than the stricter setting a clinical or
+# regulatory corpus would want.
+retrieval:
+  top_k: 5
+  score_threshold: 0.5
+  hybrid_search: true
